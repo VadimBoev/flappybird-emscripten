@@ -1,0 +1,29 @@
+﻿{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "emscripten-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "environment": {
+        "EMSDK": "G:/emsdk",
+        "EM_CONFIG": "G:/emsdk/.emscripten",
+        "EM_CACHE": "G:/emsdk/upstream/emscripten/cache"
+      },
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "G:/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "emscripten-release",
+      "displayName": "Emscripten Release",
+      "inherits": "emscripten-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ]
+}
