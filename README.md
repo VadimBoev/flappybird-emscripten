@@ -16,7 +16,7 @@ Experience the nostalgia of this iconic game right from your browser, with all t
 
 ## How to Play 🎮
 
-1. **Open the Game**: Simply navigate to the [live demo](https://vadimboev.ru/games/flappybird) (link to be added once deployed).
+1. **Open the Game**: Simply navigate to the <a href="https://vadimboev.ru/games/flappybird" target="_blank">live demo</a> (link to be added once deployed).
 2. **Start Flapping**: Click or tap the screen to make Flappy Bird flap its wings and ascend.
 3. **Avoid Obstacles**: Guide Flappy Bird through the gaps between the pipes without colliding.
 4. **Score Points**: Each successful pass through a pair of pipes earns you a point.
