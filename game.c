@@ -9,9 +9,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <emscripten.h>
 
 #define SIZE_SPACE_PIPE 3.3f
+
 #define SPACE_BETWEEN_PIPES 5
 
 //buttons
@@ -197,6 +197,7 @@ bool InitGame()
     bird.frame = 0;
     bird.lastFrameTime = 0;
 
+
     pipes[0].x = ScaleX(100.f);
     pipes[0].y = ScaleY(37.5f);
     pipes[0].w = ScaleX(15.f);
@@ -208,6 +209,7 @@ bool InitGame()
     pipes[1].w = ScaleX(15.f);
     pipes[1].h = ScaleY(37.5f);
     pipes[1].offset = Random(ScaleY(-SPACE_BETWEEN_PIPES), ScaleY(SPACE_BETWEEN_PIPES));
+
 
     logoY = ScaleY(20.83f);
     birdY = ScaleY(20.83f);
@@ -231,14 +233,14 @@ bool InitGame()
     //load best score
     //char filePath[256];
     //snprintf(filePath, sizeof(filePath), "%s/save.txt", g_App->activity->internalDataPath);
-    //
+	//
     //FILE* file = fopen(filePath, "r");
     //if (file != NULL)
     //{
     //    int loadbestscore;
     //    fscanf(file, "%d", &loadbestscore);
     //    fclose(file);
-    //
+	//
     //    bestScore = loadbestscore;
     //}
 
@@ -485,7 +487,7 @@ void Render()
             //PlayAudio("audio/click_sound.ogg");
             currentState = FADE_IN;
         }
-
+        
         // button SCORE
         if (ButtonBump(t_score, ScaleX(55.f), ScaleY(65.f), ScaleX(35.f), ScaleY(6.f)))
         {
@@ -552,7 +554,7 @@ void Render()
 
             //char filePath[256];
             //snprintf(filePath, sizeof(filePath), "%s/save.txt", g_App->activity->internalDataPath);
-            //
+			//
             //FILE* file = fopen(filePath, "w");
             //if (file != NULL)
             //{

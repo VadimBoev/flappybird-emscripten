@@ -1,19 +1,18 @@
-#include <emscripten/emscripten.h>
+#include "audio.h"
+#include "utils.h"
+#include <emscripten.h>
 #include <emscripten/html5.h>
 #include <stdlib.h>
 #include <string.h>
-#include "audio.h"
-#include "utils.h"
 
 #define MAX_PLAYERS 5
+#define MAX_USES 5
 
 typedef struct {
-    uint32_t buffer;
-    uint32_t source;
     int uses;
 } AudioPlayer;
 
-AudioPlayer players[MAX_PLAYERS] = { { 0, 0, 0 } };
+AudioPlayer players[MAX_PLAYERS] = { { 0 } };
 int currentPlayerIndex = 0;
 
 void CreateAudioEngine()
@@ -23,60 +22,80 @@ void CreateAudioEngine()
 
 void CreateAudioPlayer(AudioPlayer* player, const char* assetPath)
 {
-    player->buffer = EM_ASM_INT({
-        var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        var request = new XMLHttpRequest();
-        request.open('GET', UTF8ToString($0), true);
-        request.responseType = 'arraybuffer';
-
-        request.onload = function() {
-            audioContext.decodeAudioData(request.response, function(buffer) {
-                HEAPU32[$1 >> 2] = buffer;
-            });
-        };
-
-        request.send();
-        }, assetPath, & player->buffer);
-
-    player->uses = 0;
+    player->uses = 0; // reset counter
+    Log("Successfully created audio player for asset: %s", assetPath);
 }
 
 void PlayAudio(const char* assetPath)
 {
-    AudioPlayer* player = &players[currentPlayerIndex];
-
-    if (player->buffer == 0)
+    // find an available player
+    int availableIndex = -1;
+    for (int i = 0; i < MAX_PLAYERS; ++i)
     {
-        CreateAudioPlayer(player, assetPath);
+        if (players[i].uses < MAX_USES)
+        {
+            availableIndex = i;
+            break;
+        }
     }
 
-    player->source = EM_ASM_INT({
-        var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        var source = audioContext.createBufferSource();
-        source.buffer = HEAPU32[$0 >> 2];
-        source.connect(audioContext.destination);
-        source.start();
-        return source;
-        }, player->buffer);
+    // if no available player, create a new one
+    if (availableIndex == -1)
+    {
+        int oldestIndex = currentPlayerIndex;
+        currentPlayerIndex = (currentPlayerIndex + 1) % MAX_PLAYERS; // move to the next player in the cycle
 
-    player->uses++;
+        Log("Destroying player %d to create a new one for asset: %s", oldestIndex, assetPath);
+        players[oldestIndex].uses = 0;
+        availableIndex = oldestIndex;
+    }
 
-    currentPlayerIndex = (currentPlayerIndex + 1) % MAX_PLAYERS;
+    // start playing
+    if (availableIndex != -1)
+    {
+        EM_ASM({
+            var audio = new Audio('assets/' + UTF8ToString($0));
+            audio.play();
+        }, assetPath);
+
+        Log("Started playing asset: %s", assetPath);
+        players[availableIndex].uses++;
+    }
+    else
+    {
+        Log("No available player to play asset: %s", assetPath);
+    }
 }
 
 void PauseAudio()
 {
-    // Web Audio API does not support pausing individual sounds
+    EM_ASM({
+        var audios = document.getElementsByTagName('audio');
+        for (var i = 0; i < audios.length; i++) {
+            audios[i].pause();
+        }
+    });
 }
 
 void ResumeAudio()
 {
-    // Web Audio API does not support resuming individual sounds
+    EM_ASM({
+        var audios = document.getElementsByTagName('audio');
+        for (var i = 0; i < audios.length; i++) {
+            audios[i].play();
+        }
+    });
 }
 
 void StopAudio()
 {
-    // Web Audio API does not support stopping individual sounds
+    EM_ASM({
+        var audios = document.getElementsByTagName('audio');
+        for (var i = 0; i < audios.length; i++) {
+            audios[i].pause();
+            audios[i].currentTime = 0;
+        }
+    });
 }
 
 void DestroyAudioPlayer()

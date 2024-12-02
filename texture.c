@@ -1,33 +1,41 @@
 #include <GLES2/gl2.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "upng.h"
 #include "texture.h"
 #include "utils.h"
 #include "init.h"
 #include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-GLuint LoadTexture(const char* filePath)
+GLuint LoadTexture(const char* assetPath)
 {
-    FILE* file = fopen(filePath, "rb");
+    FILE* file = fopen(assetPath, "rb");
     if (!file)
     {
-        Log("Failed to open file: %s", filePath);
+        Log("Failed to open asset file: %s", assetPath);
         return 0;
     }
 
     fseek(file, 0, SEEK_END);
-    unsigned long len_file = ftell(file);
+    long len_file = ftell(file);
     fseek(file, 0, SEEK_SET);
 
     unsigned char* buffer = (unsigned char*)malloc(len_file);
+    if (!buffer)
+    {
+        Log("Failed to allocate memory for file: %s", assetPath);
+        fclose(file);
+        return 0;
+    }
+
     fread(buffer, 1, len_file, file);
     fclose(file);
 
     upng_t* png = upng_new_from_bytes(buffer, len_file);
     if (png == NULL)
     {
-        Log("Error creating PNG from file: %s", filePath);
+        Log("Error creating PNG from file: %s", assetPath);
         free(buffer);
         return 0;
     }
@@ -35,7 +43,7 @@ GLuint LoadTexture(const char* filePath)
     upng_decode(png);
     if (upng_get_error(png) != UPNG_EOK)
     {
-        Log("Error decoding PNG from file: %s", filePath);
+        Log("Error decoding PNG from file: %s", assetPath);
         upng_free(png);
         free(buffer);
         return 0;
@@ -62,12 +70,12 @@ GLuint LoadTexture(const char* filePath)
 
     if (!texture)
     {
-        Log("Error load texture '%s'", filePath);
+        Log("Error load texture '%s'", assetPath);
         return 0;
     }
     else
     {
-        Log("Texture '%s' is loaded!", filePath);
+        Log("Texture '%s' is loaded!", assetPath);
     }
 
     return texture;

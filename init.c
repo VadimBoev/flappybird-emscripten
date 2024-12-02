@@ -9,52 +9,55 @@
 #include "audio.h"
 #include "game.h"
 
-bool g_Initialized = false;
-EGLDisplay g_EglDisplay = EGL_NO_DISPLAY;
-EGLSurface g_EglSurface = EGL_NO_SURFACE;
-EGLContext g_EglContext = EGL_NO_CONTEXT;
+bool                 g_Initialized = false;
+EGLDisplay           g_EglDisplay = EGL_NO_DISPLAY;
+EGLSurface           g_EglSurface = EGL_NO_SURFACE;
+EGLContext           g_EglContext = EGL_NO_CONTEXT;
 
 int32_t WindowSizeX = 0;
 int32_t WindowSizeY = 0;
 
 GLuint textureProgram;
+
 GLuint colorProgram;
 GLuint gPositionHandle;
 GLuint gColorHandle;
 
+//fix by Tempa
 const char* vertexShaderTexture =
-"attribute vec4 aPosition;\n"
-"attribute vec2 aTexCoord;\n"
-"varying vec2 vTexCoord;\n"
-"void main() {\n"
-"    gl_Position = aPosition;\n"
-"    vTexCoord = aTexCoord;\n"
-"}\n";
+    "attribute vec4 aPosition;\n"
+    "attribute vec2 aTexCoord;\n"
+    "varying vec2 vTexCoord;\n"
+    "void main() {\n"
+    "    gl_Position = aPosition;\n"
+    "    vTexCoord = aTexCoord;\n"
+    "}\n";
 
 const char* fragmentShaderTexture =
-"precision mediump float;\n"
-"varying vec2 vTexCoord;\n"
-"uniform sampler2D uTexture;\n"
-"void main() {\n"
-"    vec4 texColor = texture2D(uTexture, vTexCoord);\n"
-"    if (texColor.rgb == vec3(0.0)) {\n"
-"        texColor.a = 0.0;\n"
-"    }\n"
-"    gl_FragColor = texColor;\n"
-"}\n";
+    "precision mediump float;\n"
+    "varying vec2 vTexCoord;\n"
+    "uniform sampler2D uTexture;\n"
+    "void main() {\n"
+    "    vec4 texColor = texture2D(uTexture, vTexCoord);\n"
+    "    if (texColor.rgb == vec3(0.0)) {\n"
+    "        texColor.a = 0.0;\n"
+    "    }\n"
+    "    gl_FragColor = texColor;\n"
+    "}\n";
 
+//by vadim
 const char* vertexShaderColor =
-"attribute vec4 a_Position;\n"
-"void main() {\n"
-"    gl_Position = a_Position;\n"
-"}\n";
+    "attribute vec4 a_Position;\n"
+    "void main() {\n"
+    "    gl_Position = a_Position;\n"
+    "}\n";
 
 const char* fragmentShaderColor =
-"precision mediump float;\n"
-"uniform vec4 u_Color;\n"
-"void main() {\n"
-"    gl_FragColor = u_Color;\n"
-"}\n";
+    "precision mediump float;\n"
+    "uniform vec4 u_Color;\n"
+    "void main() {\n"
+    "    gl_FragColor = u_Color;\n"
+    "}\n";
 
 void Init()
 {
@@ -122,8 +125,7 @@ void Init()
     }
 
     // Set window size
-    WindowSizeX = EM_ASM_INT({ return window.innerWidth; });
-    WindowSizeY = EM_ASM_INT({ return window.innerHeight; });
+    emscripten_get_canvas_element_size("#canvas", &WindowSizeX, &WindowSizeY);
 
     if (!InitGame())
     {
@@ -135,6 +137,7 @@ void Init()
 
     // Create shader program
     textureProgram = createProgram(vertexShaderTexture, fragmentShaderTexture);
+
     colorProgram = createProgram(vertexShaderColor, fragmentShaderColor);
     gPositionHandle = glGetAttribLocation(colorProgram, "a_Position");
     gColorHandle = glGetUniformLocation(colorProgram, "u_Color");

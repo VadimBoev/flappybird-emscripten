@@ -1,13 +1,13 @@
 #ifndef INIT_H
 #define INIT_H
 
-#include <stdbool.h>
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
+#include <stdbool.h>
 
 extern bool g_Initialized;
-extern int WindowSizeX;
-extern int WindowSizeY;
+extern int32_t WindowSizeX;
+extern int32_t WindowSizeY;
 
 extern GLuint textureProgram;
 

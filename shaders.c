@@ -1,7 +1,7 @@
 #include <GLES2/gl2.h>
+#include <stddef.h>
 #include "shaders.h"
 #include "utils.h"
-#include <stddef.h>
 
 GLuint loadShader(GLenum type, const char* source)
 {
