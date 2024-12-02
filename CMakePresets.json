@@ -17,9 +17,9 @@
       }
     },
     {
-      "name": "emscripten-release",
-      "displayName": "Emscripten Release",
-      "description": "Build with Emscripten for WebAssembly (Release)",
+      "name": "emscripten",
+      "displayName": "Emscripten",
+      "description": "Build with Emscripten for WebAssembly",
       "inherits": "emscripten-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
@@ -28,9 +28,9 @@
   ],
   "buildPresets": [
     {
-      "name": "build-emscripten-release",
-      "configurePreset": "emscripten-release",
-      "description": "Build for Emscripten Release"
+      "name": "build-emscripten",
+      "configurePreset": "emscripten",
+      "description": "Build for Emscripten"
     }
   ]
 }
