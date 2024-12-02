@@ -16,15 +16,67 @@ Experience the nostalgia of this iconic game right from your browser, with all t
 
 ## How to Play 🎮
 
-1. **Open the Game**: Simply navigate to the <a href="https://vadimboev.ru/games/flappybird" target="_blank">live demo</a> (link to be added once deployed).
+1. **Open the Game**: Simply navigate to the [live demo](https://vadimboev.ru/games/flappybird) (link to be added once deployed).
 2. **Start Flapping**: Click or tap the screen to make Flappy Bird flap its wings and ascend.
 3. **Avoid Obstacles**: Guide Flappy Bird through the gaps between the pipes without colliding.
 4. **Score Points**: Each successful pass through a pair of pipes earns you a point.
 5. **Challenge Yourself**: Try to beat your high score and share it with friends!
 
-## Installation 🛠️
+## Structure
+```
+┌── audio
+│   ├── die.mp3
+│   ├── hit.mp3
+│   ├── point.mp3
+│   └── wing.mp3
+├── buttons
+│   ├── menu.png
+│   ├── ok.png
+│   ├── pause.png
+│   ├── resume.png
+│   ├── score.png
+│   ├── share.png
+│   └── start.png
+├── sprites
+│   ├── 0.png
+│   ├── 1.png
+│   ├── 2.png
+│   ├── 3.png
+│   ├── 4.png
+│   ├── 5.png
+│   ├── 6.png
+│   ├── 7.png
+│   ├── 8.png
+│   ├── 9.png
+│   ├── 0_small.png
+│   ├── 1_small.png
+│   ├── 2_small.png
+│   ├── 3_small.png
+│   ├── 4_small.png
+│   ├── 5_small.png
+│   ├── 6_small.png
+│   ├── 7_small.png
+│   ├── 8_small.png
+│   ├── 9_small.png
+│   ├── background-day.png
+│   ├── base.png
+│   ├── bronze-medal.png
+│   ├── gameover.png
+│   ├── gold-medal.png
+│   ├── logo.png
+│   ├── message.png
+│   ├── new.png
+│   ├── panel.png
+│   ├── pipe-green.png
+│   └── govno.png
+├── favicon.ico
+├── flappybird-emscripten.data
+├── flappybird-emscripten.js
+├── flappybird-emscripten.wasm
+└── index.html
+```
 
-If you want to run the game locally or contribute to the project, follow these steps:
+## Build the Project 🛠️
 
 ### Prerequisites
 
@@ -38,9 +90,11 @@ git clone https://github.com/VadimBoev/flappybird-emscripten.git
 cd flappybird-emscripten
 ```
   
-## Build the Project
+## Build
+I was building a project in Visual Studio 2022  
+And so, you can build a project:
 ```
-use cmake in project....
+mkdir build && cd build && cmake ..
 ```
 
 ## Run the Game
