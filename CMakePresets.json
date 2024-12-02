@@ -5,25 +5,32 @@
       "name": "emscripten-base",
       "hidden": true,
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/out/build/${presetName}",
-      "installDir": "${sourceDir}/out/install/${presetName}",
+      "binaryDir": "${sourceDir}/out/build/emscripten",
+      "installDir": "${sourceDir}/out/install/emscripten",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/emscripten",
+        "CMAKE_TOOLCHAIN_FILE": "G:/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+      },
       "environment": {
         "EMSDK": "G:/emsdk",
         "EM_CONFIG": "G:/emsdk/.emscripten",
-        "EM_CACHE": "G:/emsdk/upstream/emscripten/cache"
-      },
-      "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "G:/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
-        "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
       "name": "emscripten-release",
       "displayName": "Emscripten Release",
+      "description": "Build with Emscripten for WebAssembly (Release)",
       "inherits": "emscripten-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-emscripten-release",
+      "configurePreset": "emscripten-release",
+      "description": "Build for Emscripten Release"
     }
   ]
 }
