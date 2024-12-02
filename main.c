@@ -46,13 +46,13 @@ void main_loop()
         DeltaTime = g_Time > 0.0 ? (float)(current_time - g_Time) : (float)TARGET_FRAME_TIME;
 
         // checking if enough time has passed for a new frame
-        if (current_time - g_LastFrameTime >= TARGET_FRAME_TIME) {
+        //if (current_time - g_LastFrameTime >= TARGET_FRAME_TIME) {
             MainLoopStep();
             MouseReset(&mouse);
 
             // update time last frame
             g_LastFrameTime = current_time;
-        }
+        //}
 
         g_Time = current_time;
     }

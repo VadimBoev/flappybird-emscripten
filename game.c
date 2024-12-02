@@ -274,7 +274,7 @@ void AnimateBird()
 
 void ApplyGravity()
 {
-    bird.velocity += 0.65f;
+    bird.velocity += ScaleY(0.03f); //0.65f;
     bird.y += bird.velocity;
 
     float targetAngle = bird.velocity > 0 ? 90.0f : -30.0f;
@@ -285,7 +285,7 @@ void ApplyGravity()
 
 void Jump()
 {
-    bird.velocity = -13.5f;
+    bird.velocity = -ScaleY(0.56f);//-13.5f;
     bird.angle = -30.0f;
 }
 

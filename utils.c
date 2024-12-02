@@ -24,7 +24,7 @@ void Log(const char* fmt, ...)
     va_end(args);
 }
 
-unsigned long long getTickCount()
+uint64_t getTickCount()
 {
     struct timespec now;
     clock_gettime(CLOCK_MONOTONIC, &now);
