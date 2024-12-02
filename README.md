@@ -1,3 +1,7 @@
+**[Readme на русском языке](README_RU.md)**  
+  
+[Dev blog in Telegram (ENG/RU)](https://t.me/boevdev)
+
 # Flappy Bird: Web Edition 🐦🕹️
   
 ## Overview 🌟
