@@ -11,25 +11,33 @@ double g_Time = 0.0;
 float DeltaTime = 0.0f;
 double g_LastFrameTime = 0.0;
 
-bool handle_input(int eventType, const EmscriptenMouseEvent* mouseEvent, void* userData) {
-    if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN) {
-        mouse.x = mouseEvent->canvasX;
-        mouse.y = mouseEvent->canvasY;
+bool handle_input(int eventType, const EmscriptenMouseEvent* mouseEvent, void* userData) 
+{
+    if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN) 
+    {
+        mouse.x = (int)mouseEvent->targetX;
+        mouse.y = (int)mouseEvent->targetY;
         mouse.isDown = true;
-    } else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP) {
-        mouse.x = mouseEvent->canvasX;
-        mouse.y = mouseEvent->canvasY;
+    } 
+    else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP) 
+    {
+        mouse.x = (int)mouseEvent->targetX;
+        mouse.y = (int)mouseEvent->targetY;
         mouse.isReleased = true;
-    } else if (eventType == EMSCRIPTEN_EVENT_MOUSEMOVE) {
-        mouse.x = mouseEvent->canvasX;
-        mouse.y = mouseEvent->canvasY;
+    } 
+    else if (eventType == EMSCRIPTEN_EVENT_MOUSEMOVE) 
+    {
+        mouse.x = (int)mouseEvent->targetX;
+        mouse.y = (int)mouseEvent->targetY;
         mouse.isMoved = true;
     }
     return true; // Return true to indicate that the event has been handled
 }
 
-void main_loop() {
-    if (g_Initialized) {
+void main_loop() 
+{
+    if (g_Initialized) 
+    {
         struct timespec current_timespec;
         clock_gettime(CLOCK_MONOTONIC, &current_timespec);
         double current_time = (double)(current_timespec.tv_sec) + (current_timespec.tv_nsec / 1000000000.0);
@@ -50,10 +58,11 @@ void main_loop() {
     }
 }
 
-int main(int argc, char** argv) {
-    emscripten_set_mousemove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, NULL, 1, handle_input);
-    emscripten_set_mousedown_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, NULL, 1, handle_input);
-    emscripten_set_mouseup_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, NULL, 1, handle_input);
+int main(int argc, char** argv) 
+{
+    emscripten_set_mousemove_callback("#canvas", NULL, 1, handle_input);
+    emscripten_set_mousedown_callback("#canvas", NULL, 1, handle_input);
+    emscripten_set_mouseup_callback("#canvas", NULL, 1, handle_input);
 
     Init(); // Pass NULL or adapt to Web environment
     emscripten_set_main_loop(main_loop, 0, 1);
