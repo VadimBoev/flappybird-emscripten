@@ -8,6 +8,31 @@
 #include "init.h"
 #include <math.h>
 
+void bindBuffers(const GLfloat* vertices, GLsizeiptr verticesSize, const GLuint* indices, GLsizeiptr indicesSize) {
+    GLuint vbo, ebo;
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);
+
+    GLint positionAttrib = glGetAttribLocation(textureProgram, "aPosition");
+    glEnableVertexAttribArray(positionAttrib);
+    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)0);
+
+    GLint texCoordAttrib = glGetAttribLocation(textureProgram, "aTexCoord");
+    glEnableVertexAttribArray(texCoordAttrib);
+    glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+}
+
+void unbindBuffers() {
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 GLuint LoadTexture(const char* assetPath)
 {
     FILE* file = fopen(assetPath, "rb");
@@ -81,11 +106,9 @@ GLuint LoadTexture(const char* assetPath)
     return texture;
 }
 
-void RenderTexture(GLuint texture, float x, float y, float width, float height)
-{
+void RenderTexture(GLuint texture, float x, float y, float width, float height) {
     glUseProgram(textureProgram);
 
-    // pixel coordinates to normal coordinates
     float normalized_x = (2.0f * x / WindowSizeX) - 1.0f;
     float normalized_y = 1.0f - (2.0f * y / WindowSizeY);
     float normalized_width = 2.0f * width / WindowSizeX;
@@ -103,23 +126,7 @@ void RenderTexture(GLuint texture, float x, float y, float width, float height)
         2, 3, 0
     };
 
-    GLuint vbo, ebo;
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ebo);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    GLint positionAttrib = glGetAttribLocation(textureProgram, "aPosition");
-    glEnableVertexAttribArray(positionAttrib);
-    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)0);
-
-    GLint texCoordAttrib = glGetAttribLocation(textureProgram, "aTexCoord");
-    glEnableVertexAttribArray(texCoordAttrib);
-    glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+    bindBuffers(vertices, sizeof(vertices), indices, sizeof(indices));
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -127,29 +134,19 @@ void RenderTexture(GLuint texture, float x, float y, float width, float height)
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &ebo);
+    unbindBuffers();
 }
 
-void RenderTexturePro(GLuint texture, float x, float y, float width, float height, float angle)
-{
+void RenderTexturePro(GLuint texture, float x, float y, float width, float height, float angle) {
     glUseProgram(textureProgram);
 
-    // calculate aspect ratio
-    float aspect_ratio = (float)WindowSizeX / (float)WindowSizeY;
-
-    // convert angle to radians
     float angle_rad = angle * M_PI / 180.0f;
-
-    // calculate the rotation matrix
     float cos_angle = cos(angle_rad);
     float sin_angle = sin(angle_rad);
 
-    // calculate the center of the texture in pixel coordinates
     float center_x = x + width / 2.0f;
     float center_y = y + height / 2.0f;
 
-    // calculate the transformation matrix
     float transform[4][4] = {
         {cos_angle, -sin_angle, 0.0f, center_x * (1.0f - cos_angle) + center_y * sin_angle},
         {sin_angle, cos_angle, 0.0f, center_y * (1.0f - cos_angle) - center_x * sin_angle},
@@ -157,7 +154,6 @@ void RenderTexturePro(GLuint texture, float x, float y, float width, float heigh
         {0.0f, 0.0f, 0.0f, 1.0f}
     };
 
-    // calculate the vertices before transformation in pixel coordinates
     GLfloat vertices[] = {
         x, y, 0.0f, 0.0f,
         x + width, y, 1.0f, 0.0f,
@@ -165,7 +161,6 @@ void RenderTexturePro(GLuint texture, float x, float y, float width, float heigh
         x, y + height, 0.0f, 1.0f
     };
 
-    // apply the transformation matrix to the vertices
     for (int i = 0; i < 4; ++i) {
         float x = vertices[i * 4];
         float y = vertices[i * 4 + 1];
@@ -173,7 +168,6 @@ void RenderTexturePro(GLuint texture, float x, float y, float width, float heigh
         vertices[i * 4 + 1] = transform[1][0] * x + transform[1][1] * y + transform[1][3];
     }
 
-    // normalize the vertices to OpenGL coordinates
     for (int i = 0; i < 4; ++i) {
         vertices[i * 4] = (2.0f * vertices[i * 4] / WindowSizeX) - 1.0f;
         vertices[i * 4 + 1] = 1.0f - (2.0f * vertices[i * 4 + 1] / WindowSizeY);
@@ -184,23 +178,7 @@ void RenderTexturePro(GLuint texture, float x, float y, float width, float heigh
         2, 3, 0
     };
 
-    GLuint vbo, ebo;
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ebo);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    GLint positionAttrib = glGetAttribLocation(textureProgram, "aPosition");
-    glEnableVertexAttribArray(positionAttrib);
-    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)0);
-
-    GLint texCoordAttrib = glGetAttribLocation(textureProgram, "aTexCoord");
-    glEnableVertexAttribArray(texCoordAttrib);
-    glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+    bindBuffers(vertices, sizeof(vertices), indices, sizeof(indices));
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -208,8 +186,7 @@ void RenderTexturePro(GLuint texture, float x, float y, float width, float heigh
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &ebo);
+    unbindBuffers();
 }
 
 void CreateBox(uint32_t color, float posX, float posY, float width, float height)
