@@ -1,7 +1,5 @@
 # Flappy Bird: Web Edition 🐦🕹️
   
-## Active development. It doesn't work!
-
 ## Overview 🌟
 
 Welcome to the **Flappy Bird: Web Edition** repository!  
