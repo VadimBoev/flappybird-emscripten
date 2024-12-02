@@ -68,7 +68,12 @@ Experience the nostalgia of this iconic game right from your browser, with all t
 │   ├── new.png
 │   ├── panel.png
 │   ├── pipe-green.png
-│   └── govno.png
+│   ├── platinum-medal.png
+│   ├── silver-medal.png
+│   ├── sparkle-sheet.png
+│   ├── yellowbird-downflap.png
+│   ├── yellowbird-midflap.png
+│   └── yellowbird-upflap.png
 ├── favicon.ico
 ├── flappybird-emscripten.data
 ├── flappybird-emscripten.js
