@@ -108,7 +108,7 @@ mkdir build && cd build && cmake ..
 ```
 
 ## Run the Game
-Open the index.html file in your web browser
+Open the `index.html` file in your web browser
   
 ## Contributing 🤝
 We welcome contributions from the community! Whether you're fixing bugs, improving performance, or adding new features, your help is appreciated.
