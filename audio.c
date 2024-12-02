@@ -23,7 +23,7 @@ void CreateAudioEngine()
 void CreateAudioPlayer(AudioPlayer* player, const char* assetPath)
 {
     player->uses = 0; // reset counter
-    Log("Successfully created audio player for asset: %s", assetPath);
+    //Log("Successfully created audio player for asset: %s", assetPath);
 }
 
 void PlayAudio(const char* assetPath)
@@ -45,7 +45,7 @@ void PlayAudio(const char* assetPath)
         int oldestIndex = currentPlayerIndex;
         currentPlayerIndex = (currentPlayerIndex + 1) % MAX_PLAYERS; // move to the next player in the cycle
 
-        Log("Destroying player %d to create a new one for asset: %s", oldestIndex, assetPath);
+        //Log("Destroying player %d to create a new one for asset: %s", oldestIndex, assetPath);
         players[oldestIndex].uses = 0;
         availableIndex = oldestIndex;
     }
@@ -54,16 +54,16 @@ void PlayAudio(const char* assetPath)
     if (availableIndex != -1)
     {
         EM_ASM({
-            var audio = new Audio('assets/' + UTF8ToString($0));
+            var audio = new Audio(UTF8ToString($0));
             audio.play();
         }, assetPath);
 
-        Log("Started playing asset: %s", assetPath);
+        //Log("Started playing asset: %s", assetPath);
         players[availableIndex].uses++;
     }
     else
     {
-        Log("No available player to play asset: %s", assetPath);
+        //Log("No available player to play asset: %s", assetPath);
     }
 }
 
