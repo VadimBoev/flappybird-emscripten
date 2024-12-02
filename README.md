@@ -22,6 +22,8 @@ Experience the nostalgia of this iconic game right from your browser, with all t
 4. **Score Points**: Each successful pass through a pair of pipes earns you a point.
 5. **Challenge Yourself**: Try to beat your high score and share it with friends!
 
+## Build the Project 🛠️
+
 ## Structure
 ```
 ┌── audio
@@ -81,8 +83,6 @@ Experience the nostalgia of this iconic game right from your browser, with all t
 └── index.html
 ```
 
-## Build the Project 🛠️
-
 ### Prerequisites
 
 - [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) installed and configured.
@@ -96,6 +96,8 @@ cd flappybird-emscripten
 ```
   
 ## Build
+- Edit CMakeLists.txt, it's mostly about paths, for example `G:\emsdk`  
+
 I was building a project in Visual Studio 2022  
 And so, you can build a project:
 ```
