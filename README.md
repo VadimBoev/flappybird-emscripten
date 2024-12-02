@@ -6,8 +6,7 @@
   
 ## Overview 🌟
 
-Welcome to the **Flappy Bird: Web Edition** repository!  
-This project is a port of the classic Flappy Bird game, originally developed in C, to run seamlessly in your web browser using [Emscripten](https://emscripten.org/).  
+This project is a port of the classic [Flappy Bird](https://github.com/VadimBoev/FlappyBird) game, originally developed in C, to run seamlessly in your web browser using [Emscripten](https://emscripten.org/).  
 Experience the nostalgia of this iconic game right from your browser, with all the original mechanics and charm intact.
 
 ## Features 🚀
